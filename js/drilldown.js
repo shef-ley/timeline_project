@@ -12,55 +12,59 @@ const DD_MID_Y = () => TOP_M + tH * 0.5;  // vertical center of event line
 // ── Entry point (called from tooltip "Explore →" button) ──────────
 window.enterDrilldown = function(slug) {
   hideTip();
-  // Find the civ object matching this slug
   ddCiv = CIVS.find(c => civSlug(c.name) === slug) || null;
-  if (!ddData || civSlug(ddData.name || '') !== slug) {
-    loadEventsFile(slug);
+
+  // Gate: both the file load AND the zoom animation must finish before switching views
+  let fileReady = false, animReady = false;
+  function tryActivate() { if (fileReady && animReady) activateDrilldown(); }
+
+  // Load events file, or use cached copy
+  if (ddData && civSlug(ddData.name || '') === slug) {
+    fileReady = true;
   } else {
-    activateDrilldown();
+    loadEventsFile(slug, () => { fileReady = true; tryActivate(); });
+  }
+
+  // Zoom the world view into the civ's time span, then hand off
+  if (ddCiv) {
+    if (isLogMode) {
+      linLeft = 2026 - Math.pow(10, logL);
+      linRight = 2026 - Math.pow(10, logR);
+      transT = 0; isLogMode = false;
+      const mb = document.getElementById('modeBtn');
+      if (mb) { mb.classList.remove('on'); mb.textContent = 'Log Scale'; }
+    }
+    const pad = (ddCiv.e - ddCiv.s) * 0.1;
+    startAnim({ linLeft: ddCiv.s - pad, linRight: ddCiv.e + pad }, 550, () => {
+      animReady = true; tryActivate();
+    });
+  } else {
+    animReady = true;
+    tryActivate();
   }
 };
 
-function loadEventsFile(slug) {
-  // Remove any previously loaded EVENTS to avoid stale data
+function loadEventsFile(slug, onReady) {
   delete window.EVENTS;
   const s = document.createElement('script');
   s.src = `data/events/${slug}.js`;
+  const fallback = () => {
+    ddData = { name: ddCiv ? ddCiv.name : slug, color: ddCiv ? ddCiv.c : '#888',
+               wiki: ddCiv ? ddCiv.w : '', events: [] };
+    onReady?.();
+  };
   s.onload = () => {
-    if (window.EVENTS) {
-      ddData = window.EVENTS;
-      delete window.EVENTS;
-      activateDrilldown();
-    } else {
-      showNoDataFallback();
-    }
+    if (window.EVENTS) { ddData = window.EVENTS; delete window.EVENTS; }
+    else { ddData = { name: ddCiv ? ddCiv.name : slug, color: ddCiv ? ddCiv.c : '#888',
+                      wiki: ddCiv ? ddCiv.w : '', events: [] }; }
+    onReady?.();
   };
-  s.onerror = showNoDataFallback;
+  s.onerror = fallback;
   document.head.appendChild(s);
-}
-
-function showNoDataFallback() {
-  // No events file yet — show the civ on its own with a message
-  ddData = {
-    name: ddCiv ? ddCiv.name : 'Unknown',
-    color: ddCiv ? ddCiv.c : '#888',
-    wiki:  ddCiv ? ddCiv.w : '',
-    events: []
-  };
-  activateDrilldown();
 }
 
 function activateDrilldown() {
   window.currentView = 'drilldown';
-
-  // Set the view to span the civilization's lifetime + 10% padding
-  if (ddCiv) {
-    const pad  = (ddCiv.e - ddCiv.s) * 0.08;
-    linLeft    = ddCiv.s - pad;
-    linRight   = ddCiv.e + pad;
-  }
-
-  // Switch UI
   buildDrilldownPanel();
   window.showDrilldownPanel();
   showDrilldownControls();
@@ -230,30 +234,39 @@ function drawDDBackground() {
 
 function drawDDEvents() {
   if (!ddData || !ddData.events.length) {
-    // No events — show placeholder text
     ctx.fillStyle = '#333'; ctx.font = '14px system-ui'; ctx.textAlign = 'center';
     ctx.fillText('No events data yet. Add events in data/events/', LEFT_M + tW/2, H/2);
     ctx.font = '12px system-ui'; ctx.fillStyle = '#444';
-    ctx.fillText(`${civSlug(ddData.name)}.js`, LEFT_M + tW/2, H/2 + 22);
+    ctx.fillText(`${civSlug(ddData ? ddData.name : '')}.js`, LEFT_M + tW/2, H/2 + 22);
     return;
   }
-  const midY  = DD_MID_Y();
-  const ABOVE = tH * 0.28;   // how far above center for "above" labels
-  const BELOW = tH * 0.28;   // how far below center for "below" labels
-  const TICK  = 10;
 
-  ddData.events.forEach((evt, i) => {
-    const x = yearToXLin(evt.year);
-    if (x < LEFT_M || x > LEFT_M + tW) return;
+  const midY = DD_MID_Y();
+  const REACH  = tH * 0.27;  // distance from axis to label anchor
+  const TICK   = 10;
+  const MIN_GAP = 62;         // minimum px clearance before preferring the other side
 
-    const above  = i % 2 === 0;
-    const labelY = above ? midY - ABOVE : midY + BELOW;
+  // Greedy left-to-right side assignment — avoids the naïve i%2 overlap problem
+  const visible = ddData.events
+    .map(evt => ({ evt, x: yearToXLin(evt.year) }))
+    .filter(({ x }) => x >= LEFT_M && x <= LEFT_M + tW);
+
+  const lastX = { above: -Infinity, below: -Infinity };
+  visible.forEach(item => {
+    const ca = item.x - lastX.above;
+    const cb = item.x - lastX.below;
+    item.above = ca >= cb;
+    lastX[item.above ? 'above' : 'below'] = item.x + MIN_GAP * 0.5;
+  });
+
+  visible.forEach(({ evt, x, above }) => {
+    const labelY = above ? midY - REACH : midY + REACH;
     const tickY1 = above ? midY - TICK  : midY;
     const tickY2 = above ? midY         : midY + TICK;
     const isHov  = evt === ddHover;
     const col    = isHov ? '#fff' : (ddCiv ? ddCiv.c : '#aaa');
 
-    // Vertical tick line from center to label
+    // Stem from axis to label
     ctx.strokeStyle = col + (isHov ? 'ff' : '88'); ctx.lineWidth = isHov ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(x, tickY1); ctx.lineTo(x, labelY); ctx.stroke();
 
@@ -261,27 +274,26 @@ function drawDDEvents() {
     ctx.strokeStyle = col + 'cc'; ctx.lineWidth = isHov ? 2 : 1.5;
     ctx.beginPath(); ctx.moveTo(x, tickY1); ctx.lineTo(x, tickY2); ctx.stroke();
 
-    // Dot at axis
+    // Dot on axis
     ctx.fillStyle = col;
-    ctx.beginPath(); ctx.arc(x, midY, isHov ? 4 : 2.5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x, midY, isHov ? 4 : 2.5, 0, Math.PI * 2); ctx.fill();
 
     // Year label
     ctx.fillStyle = col + (isHov ? 'ff' : 'aa');
     ctx.font = `${isHov ? 'bold ' : ''}10px system-ui`; ctx.textAlign = 'center';
     ctx.fillText(fmtYear(evt.year), x, above ? labelY - 16 : labelY + 24);
 
-    // Event title (wrapping if needed)
+    // Event title with word-wrap
     ctx.fillStyle = isHov ? '#fff' : '#ccc';
     ctx.font = `${isHov ? 'bold ' : ''}11px system-ui`;
     const maxW = 110;
     const words = evt.title.split(' ');
     let line = '', lineY = above ? labelY - 4 : labelY + 38;
     const lineH = 14, dir = above ? -1 : 1;
-    words.forEach((word, wi) => {
+    words.forEach(word => {
       const test = line ? line + ' ' + word : word;
       if (ctx.measureText(test).width > maxW && line) {
-        ctx.fillText(line, x, lineY);
-        line = word; lineY += dir * lineH;
+        ctx.fillText(line, x, lineY); line = word; lineY += dir * lineH;
       } else { line = test; }
     });
     if (line) ctx.fillText(line, x, lineY);

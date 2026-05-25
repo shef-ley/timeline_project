@@ -484,11 +484,20 @@ const rfiltersEl = document.getElementById('rfilters');
 ['All', ...REGION_ORDER].forEach(r => {
   const b = document.createElement('button');
   b.className = 'rfbtn' + (r === 'All' ? ' on' : '');
-  b.textContent = r;
+  if (r !== 'All' && REGION_COLORS[r]) {
+    const dot = document.createElement('span');
+    dot.className = 'rfbtn-dot';
+    dot.style.background = REGION_COLORS[r];
+    b.appendChild(dot);
+    b.appendChild(document.createTextNode(r));
+  } else {
+    b.textContent = r;
+  }
   b.onclick = () => {
     filterRegion = r;
-    document.querySelectorAll('.rfbtn').forEach(x => x.classList.remove('on'));
+    document.querySelectorAll('.rfbtn').forEach(x => { x.classList.remove('on'); x.style.borderColor = ''; });
     b.classList.add('on');
+    if (r !== 'All') b.style.borderColor = REGION_COLORS[r] + '99';
     rebuildList();
   };
   rfiltersEl.appendChild(b);
@@ -515,7 +524,12 @@ function rebuildList() {
     const wl = document.createElement('a');
     wl.className = 'wbtn'; wl.href = 'https://en.wikipedia.org/wiki/'+civ.w;
     wl.target = '_blank'; wl.textContent = 'Wiki'; wl.onclick = e => e.stopPropagation();
-    row.appendChild(dot); row.appendChild(name); row.appendChild(wl);
+    const expBtn = document.createElement('button');
+    expBtn.className = 'exp-btn';
+    expBtn.textContent = '→';
+    expBtn.title = 'Explore events';
+    expBtn.onclick = e => { e.stopPropagation(); window.enterDrilldown(civSlug(civ.name)); };
+    row.appendChild(dot); row.appendChild(name); row.appendChild(expBtn); row.appendChild(wl);
     row.onclick = () => {
       activePanelCiv = civ;
       const mid = (civ.s + civ.e) / 2, span = Math.max(civ.e - civ.s, 200) * 2.5;
@@ -547,6 +561,72 @@ window.showDrilldownPanel = function() {
   const dd = document.getElementById('panel-drilldown');
   if (dd) dd.style.display = 'flex';
 };
+
+// ── Touch support (pan + pinch-zoom for both views) ───────────────
+let touchState = null;
+
+function getTouchMidX(t) {
+  return t.length > 1 ? (t[0].clientX + t[1].clientX) / 2 : t[0].clientX;
+}
+function getTouchDist(t) {
+  const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if (modeSwitching) return;
+  const t = e.touches;
+  touchState = {
+    x0: getTouchMidX(t), ll0: linLeft, lr0: linRight,
+    logL0: logL, logR0: logR,
+    dist0: t.length > 1 ? getTouchDist(t) : null,
+    pivYr: t.length > 1 ? xToYearLin(getTouchMidX(t)) : null,
+  };
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!touchState || modeSwitching) return;
+  const t = e.touches;
+  const midX = getTouchMidX(t);
+
+  if (t.length > 1 && touchState.dist0 !== null) {
+    // Pinch-to-zoom — scale from initial state relative to initial pinch midpoint
+    const factor = getTouchDist(t) / touchState.dist0;
+    if (window.currentView === 'drilldown' || !isLogMode) {
+      const span = (touchState.lr0 - touchState.ll0) / factor;
+      const frac = (touchState.x0 - LEFT_M) / tW;
+      linLeft  = touchState.pivYr - frac * span;
+      linRight = touchState.pivYr + (1 - frac) * span;
+      clampLin();
+    } else {
+      const pivLog = touchState.logL0 - (touchState.x0 - LEFT_M) / tW * (touchState.logL0 - touchState.logR0);
+      logL = pivLog + (touchState.logL0 - pivLog) / factor;
+      logR = pivLog + (touchState.logR0 - pivLog) / factor;
+      clampLog();
+    }
+  } else {
+    // Single-finger pan
+    const dx = midX - touchState.x0;
+    if (window.currentView === 'drilldown' || !isLogMode) {
+      const dYr = -dx / tW * (touchState.lr0 - touchState.ll0);
+      linLeft  = touchState.ll0 + dYr; linRight = touchState.lr0 + dYr; clampLin();
+    } else {
+      const dLC = -dx / tW * (touchState.logL0 - touchState.logR0);
+      logL = touchState.logL0 + dLC; logR = touchState.logR0 + dLC; clampLog();
+    }
+  }
+  draw();
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  if (e.touches.length === 0) { touchState = null; return; }
+  // One finger lifted mid-pinch — reset to single-finger pan from current position
+  touchState = { x0: e.touches[0].clientX, ll0: linLeft, lr0: linRight,
+                 logL0: logL, logR0: logR, dist0: null, pivYr: null };
+}, { passive: false });
+canvas.addEventListener('touchcancel', () => { touchState = null; }, { passive: false });
 
 // ── Init ──────────────────────────────────────────────────────────
 window.addEventListener('resize', () => { resize(); draw(); });
