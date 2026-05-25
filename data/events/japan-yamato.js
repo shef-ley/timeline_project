@@ -1,0 +1,40 @@
+// Japan (Yamato+) — key events for drill-down timeline
+// Span: 250 CE – 2025 (Yamato period → present)
+
+window.EVENTS = {
+  name: "Japan (Yamato+)",
+  color: "#f870b0",
+  wiki: "History_of_Japan",
+  events: [
+    { year:250,  title:"Yamato period — first unified Japanese state emerges",      wiki:"Yamato_period" },
+    { year:538,  title:"Buddhism introduced from Korea — transforms Japanese culture",wiki:"Buddhism_in_Japan" },
+    { year:604,  title:"Shotoku's 17-Article Constitution — Chinese governance adopted",wiki:"Prince_Sh%C5%8Dtoku" },
+    { year:645,  title:"Taika Reform — centralized imperial government established",wiki:"Taika_Reform" },
+    { year:710,  title:"Nara founded — first permanent capital; Buddhism flourishes",wiki:"Nara_period" },
+    { year:794,  title:"Heian-kyō (Kyoto) becomes capital — 1,000-year imperial seat",wiki:"Heian_period" },
+    { year:1000, title:"The Tale of Genji written — world's first novel",          wiki:"The_Tale_of_Genji" },
+    { year:1185, title:"Genpei War ends — samurai class takes power; shogunate begins",wiki:"Genpei_War" },
+    { year:1192, title:"Minamoto Yoritomo — first shogun; feudal Japan established",wiki:"Minamoto_no_Yoritomo" },
+    { year:1274, title:"First Mongol invasion of Japan — typhoon destroys fleet",  wiki:"Mongol_invasions_of_Japan" },
+    { year:1281, title:"Second Mongol invasion — second divine wind (kamikaze)",    wiki:"Mongol_invasions_of_Japan" },
+    { year:1333, title:"Kemmu Restoration — emperor briefly reclaims power",       wiki:"Kenmu_Restoration" },
+    { year:1467, title:"Ōnin War — century of Sengoku civil wars begins",          wiki:"Ōnin_War" },
+    { year:1543, title:"Portuguese arrive — guns and Christianity introduced",     wiki:"Nanban_trade" },
+    { year:1568, title:"Oda Nobunaga begins unification of Japan",                 wiki:"Oda_Nobunaga" },
+    { year:1592, title:"Toyotomi Hideyoshi invades Korea — massive failed campaign",wiki:"Japanese_invasions_of_Korea_(1592%E2%80%931598)" },
+    { year:1600, title:"Battle of Sekigahara — Tokugawa Ieyasu wins supreme power",wiki:"Battle_of_Sekigahara" },
+    { year:1603, title:"Tokugawa shogunate — 260 years of peace and isolation",   wiki:"Tokugawa_shogunate" },
+    { year:1639, title:"Sakoku — Japan seals itself off from the world",           wiki:"Sakoku" },
+    { year:1853, title:"Perry's Black Ships force Japan open — isolation ends",    wiki:"Convention_of_Kanagawa" },
+    { year:1868, title:"Meiji Restoration — emperor restored; rapid modernization",wiki:"Meiji_Restoration" },
+    { year:1894, title:"First Sino-Japanese War — Japan defeats China, shocks world",wiki:"First_Sino-Japanese_War" },
+    { year:1905, title:"Russo-Japanese War — first Asian power defeats European",  wiki:"Russo-Japanese_War" },
+    { year:1910, title:"Korea annexed — Japanese empire expands",                  wiki:"Japan%E2%80%93Korea_Treaty_of_1910" },
+    { year:1931, title:"Manchurian Incident — Japan seizes Manchuria",             wiki:"Mukden_Incident" },
+    { year:1941, title:"Attack on Pearl Harbor — Pacific War begins",              wiki:"Attack_on_Pearl_Harbor" },
+    { year:1945, title:"Atomic bombs on Hiroshima and Nagasaki — Japan surrenders",wiki:"Atomic_bombings_of_Hiroshima_and_Nagasaki" },
+    { year:1952, title:"American occupation ends — Japan regains sovereignty",     wiki:"Treaty_of_San_Francisco" },
+    { year:1968, title:"Japan becomes world's second-largest economy",             wiki:"Japanese_economic_miracle" },
+    { year:1989, title:"Heisei era — asset bubble bursts; 'Lost Decade' begins",  wiki:"Japanese_asset_price_bubble" },
+  ]
+};
