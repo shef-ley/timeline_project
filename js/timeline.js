@@ -353,9 +353,15 @@ function clampLin() {
   if (linLeft  < HARD_MIN) { linLeft  = HARD_MIN; linRight = HARD_MIN + span; }
 }
 function clampLog() {
+  // Enforce span limits (min zoom / max zoom-out)
+  if (logL - logR < 0.05)    logL = logR + 0.05;
+  if (logL - logR > LOG_MAX) logR = logL - LOG_MAX;
+  // Slide window when hitting temporal boundaries (mirrors clampLin behaviour)
+  if (logL > LOG_MAX) { logR += LOG_MAX - logL; logL = LOG_MAX; }
+  if (logR < 0)       { logL -= logR;            logR = 0;      }
+  // Hard clamps as safety net
   logL = Math.min(LOG_MAX, logL);
   logR = Math.max(0, logR);
-  if (logL - logR < 0.05) logL = logR + 0.05;
 }
 
 // ── Tooltip ───────────────────────────────────────────────────────
