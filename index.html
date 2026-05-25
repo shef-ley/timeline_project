@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive History Timeline</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<!-- Control buttons (swapped by drilldown.js when navigating) -->
+<div id="ctl">
+  <button id="modeBtn" class="cbtn">Log Scale</button>
+  <button id="branchBtn" class="cbtn">Branches</button>
+</div>
+
+<!-- Side panel -->
+<div id="panel">
+  <!-- World view: search + civ list -->
+  <div id="panel-world" style="display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;">
+    <h2>World History Timeline</h2>
+    <input id="search" type="text" placeholder="Search civilizations…" autocomplete="off">
+    <div id="rfilters"></div>
+    <div id="civlist"></div>
+  </div>
+  <!-- Drill-down view: populated by drilldown.js -->
+  <!-- #panel-drilldown is created dynamically -->
+</div>
+
+<!-- Branch type legend -->
+<div id="blegend">
+  <div class="bl-row"><div class="bl-line" style="background:#aaaacc;height:2px"></div> Succession</div>
+  <div class="bl-row"><div class="bl-line" style="background:#88aa44;border-top:2px dashed #88aa44;height:0"></div> Influence</div>
+  <div class="bl-row"><div class="bl-line" style="background:#cc4444;height:2px"></div> Conquest</div>
+  <div class="bl-row"><div class="bl-line" style="background:#44aacc;border-top:2px dashed #44aacc;height:0"></div> Emergence</div>
+  <div class="bl-row"><div class="bl-line" style="background:#aa44cc;height:2px"></div> Split</div>
+</div>
+
+<!-- Tooltip -->
+<div id="tip"></div>
+
+<!-- Hint bar -->
+<div id="hint">Scroll to zoom · Drag to pan · Hover a bar · Click <b>Explore →</b> to drill into a civilization</div>
+
+<!-- Data -->
+<script src="data/civilizations.js"></script>
+<script src="data/branches.js"></script>
+
+<!-- App -->
+<script src="js/timeline.js"></script>
+<script src="js/drilldown.js"></script>
+
+</body>
+</html>

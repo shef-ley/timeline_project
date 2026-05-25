@@ -1,0 +1,94 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0d0d1a; overflow: hidden; font-family: system-ui, sans-serif; }
+canvas { display: block; position: absolute; top: 0; left: 0; z-index: 0; cursor: grab; }
+canvas.grabbing { cursor: grabbing; }
+
+/* ── Controls ── */
+#ctl {
+  position: fixed; top: 8px; left: 142px;
+  display: flex; gap: 6px; z-index: 10;
+}
+.cbtn {
+  padding: 5px 11px; border-radius: 7px; border: 1px solid #333;
+  background: rgba(10,10,28,0.88); color: #999; font-size: 11px;
+  cursor: pointer; backdrop-filter: blur(4px); transition: all 0.15s;
+}
+.cbtn:hover { border-color: #666; color: #ddd; }
+.cbtn.on { background: #0e2a50; border-color: #3a7ad0; color: #aee; }
+.cbtn.back { border-color: #444; color: #ccc; }
+.cbtn.back:hover { background: #1a1a30; }
+
+/* ── Side panel ── */
+#panel {
+  position: fixed; top: 0; right: 0; width: 260px; height: 100vh;
+  background: rgba(8,8,22,0.95); border-left: 1px solid #1e1e38;
+  display: flex; flex-direction: column; padding: 10px; gap: 8px;
+  z-index: 10; backdrop-filter: blur(4px);
+}
+#panel h2 { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1.5px; padding-top: 4px; }
+#panel h3 { font-size: 13px; color: #ccc; font-weight: 600; }
+#panel p  { font-size: 11px; color: #666; line-height: 1.5; }
+#panel a  { color: #4af; font-size: 11px; }
+
+#search {
+  width: 100%; padding: 7px 10px; border-radius: 7px;
+  border: 1px solid #333; background: #111; color: #eee; font-size: 13px;
+}
+#search:focus { outline: none; border-color: #4af; }
+#search::placeholder { color: #444; }
+
+#rfilters { display: flex; flex-wrap: wrap; gap: 4px; }
+.rfbtn {
+  padding: 3px 8px; border-radius: 999px; border: 1px solid #333;
+  background: #111; color: #888; font-size: 11px; cursor: pointer; transition: all 0.12s;
+}
+.rfbtn:hover { border-color: #666; color: #ccc; }
+.rfbtn.on { background: #0e2a50; border-color: #3a7ad0; color: #aee; }
+
+#civlist, #eventlist { overflow-y: auto; flex: 1; min-height: 0; }
+
+.crow, .erow {
+  display: flex; align-items: center; gap: 6px; padding: 5px 6px;
+  border-radius: 6px; cursor: pointer; transition: background 0.1s;
+}
+.crow:hover, .erow:hover { background: #141428; }
+.crow.hi, .erow.hi { background: #0e2040; }
+
+.cdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.eyear { font-size: 11px; color: #666; flex-shrink: 0; width: 42px; text-align: right; }
+.cname, .etitle { font-size: 12px; flex: 1; color: #ccc; line-height: 1.3; }
+.wbtn { font-size: 11px; color: #4af; text-decoration: none; flex-shrink: 0; }
+.wbtn:hover { color: #8df; }
+
+/* ── Branch legend ── */
+#blegend {
+  position: fixed; bottom: 62px; left: 142px; display: none;
+  flex-direction: column; gap: 5px; z-index: 10;
+  background: rgba(8,8,22,0.88); border: 1px solid #222;
+  border-radius: 8px; padding: 8px 12px; font-size: 11px; color: #888;
+}
+.bl-row { display: flex; align-items: center; gap: 8px; }
+.bl-line { width: 24px; height: 2px; flex-shrink: 0; }
+
+/* ── Tooltip ── */
+#tip {
+  position: fixed; background: rgba(0,0,0,0.92); border: 1px solid #333;
+  border-radius: 8px; padding: 8px 12px; font-size: 12px; line-height: 1.6;
+  pointer-events: none; z-index: 20; display: none; max-width: 230px; color: #eee;
+}
+#tip b { font-size: 13px; color: #fff; display: block; margin-bottom: 2px; }
+#tip span { color: #888; font-size: 11px; }
+#tip .tip-actions { margin-top: 6px; display: flex; gap: 8px; pointer-events: all; }
+#tip .tip-actions a, #tip .tip-actions button {
+  font-size: 11px; color: #4af; background: none; border: none;
+  cursor: pointer; padding: 0; text-decoration: none;
+}
+#tip .tip-actions a:hover, #tip .tip-actions button:hover { color: #8df; }
+
+/* ── Hint ── */
+#hint { position: fixed; bottom: 6px; left: 148px; font-size: 11px; color: #2a2a44; pointer-events: none; z-index: 5; }
+
+/* ── Drilldown header in panel ── */
+#dd-header { border-bottom: 1px solid #1e1e38; padding-bottom: 8px; }
+#dd-header .dd-civ-name { font-size: 15px; font-weight: 700; color: #eee; margin-top: 2px; }
+#dd-header .dd-dates   { font-size: 11px; color: #666; margin-top: 2px; }
