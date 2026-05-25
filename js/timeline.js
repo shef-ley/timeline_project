@@ -376,7 +376,11 @@ function showTip(civ, x, y) {
 }
 function hideTip() { tip.style.display = 'none'; tipCiv = null; }
 function civSlug(name) {
-  return name.toLowerCase().replace(/\s*[\/(+)]/g, '-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  return name.toLowerCase()
+    .replace(/[\s/\(+]+/g, '-')   // spaces, /, (, + all become hyphens
+    .replace(/[^a-z0-9-]/g, '')   // strip remaining special chars
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 
 // ── Interactions ──────────────────────────────────────────────────

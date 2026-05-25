@@ -1,0 +1,42 @@
+// Ottoman Empire — key events for drill-down timeline
+// Span: 1299 – 1922 (founding → abolition of the sultanate)
+
+window.EVENTS = {
+  name: "Ottoman Empire",
+  color: "#20a8e8",
+  wiki: "Ottoman_Empire",
+  events: [
+    { year:1299, title:"Osman I founds the Ottoman state in Anatolia",         wiki:"Osman_I" },
+    { year:1326, title:"Bursa captured — first major Ottoman city",            wiki:"Bursa" },
+    { year:1354, title:"Ottomans cross into Europe at Gallipoli",              wiki:"Ottoman_wars_in_Europe" },
+    { year:1389, title:"Battle of Kosovo — Serbia crushed, Balkans opened",    wiki:"Battle_of_Kosovo" },
+    { year:1396, title:"Battle of Nicopolis — Crusade against Ottomans fails", wiki:"Battle_of_Nicopolis" },
+    { year:1402, title:"Battle of Ankara — Timur defeats and captures Bayezid I",wiki:"Battle_of_Ankara" },
+    { year:1453, title:"Mehmed II conquers Constantinople — end of Byzantium", wiki:"Fall_of_Constantinople" },
+    { year:1480, title:"Failed siege of Rhodes; raid on Otranto (Italy)",      wiki:"Siege_of_Rhodes_(1480)" },
+    { year:1492, title:"Ottoman Empire welcomes Jews expelled from Spain",     wiki:"Alhambra_Decree" },
+    { year:1514, title:"Battle of Chaldiran — Ottomans defeat Safavids",       wiki:"Battle_of_Chaldiran" },
+    { year:1516, title:"Selim I conquers Syria and Egypt — caliphate acquired",wiki:"Ottoman_Egypt" },
+    { year:1520, title:"Suleiman the Magnificent begins reign — golden age",   wiki:"Suleiman_the_Magnificent" },
+    { year:1521, title:"Belgrade captured",                                    wiki:"Suleiman_the_Magnificent" },
+    { year:1526, title:"Battle of Mohács — Hungary conquered",                 wiki:"Battle_of_Mohács" },
+    { year:1529, title:"First siege of Vienna — Ottoman advance halted",       wiki:"Siege_of_Vienna" },
+    { year:1571, title:"Battle of Lepanto — Ottoman navy defeated by Holy League",wiki:"Battle_of_Lepanto" },
+    { year:1683, title:"Second siege of Vienna — turned back, empire begins decline",wiki:"Battle_of_Vienna" },
+    { year:1699, title:"Treaty of Karlowitz — Ottomans cede Hungary to Austria",wiki:"Treaty_of_Karlowitz" },
+    { year:1718, title:"Tulip Period — Ottoman Westernization and reform begins",wiki:"Tulip_period" },
+    { year:1798, title:"Napoleon invades Egypt — French challenge to Ottoman power",wiki:"French_campaign_in_Egypt_and_Syria" },
+    { year:1821, title:"Greek War of Independence — first major loss of territory",wiki:"Greek_War_of_Independence" },
+    { year:1839, title:"Tanzimat reforms — modernization and legal equality",  wiki:"Tanzimat" },
+    { year:1853, title:"Crimean War — Ottomans allied with Britain and France", wiki:"Crimean_War" },
+    { year:1877, title:"Russo-Turkish War — major Balkan territories lost",    wiki:"Russo-Turkish_War_(1877–1878)" },
+    { year:1908, title:"Young Turk Revolution — constitutional monarchy",      wiki:"Young_Turk_Revolution" },
+    { year:1912, title:"First Balkan War — empire expelled from most of Europe",wiki:"First_Balkan_War" },
+    { year:1914, title:"Enters WWI on German side",                             wiki:"Ottoman_Empire_in_World_War_I" },
+    { year:1915, title:"Armenian Genocide",                                    wiki:"Armenian_genocide" },
+    { year:1916, title:"Arab Revolt backed by Britain (Lawrence of Arabia)",   wiki:"Arab_Revolt" },
+    { year:1918, title:"WWI ends — empire occupied and dismembered",           wiki:"Armistice_of_Mudros" },
+    { year:1920, title:"Treaty of Sèvres — empire carved up by Allies",        wiki:"Treaty_of_Sèvres" },
+    { year:1922, title:"Sultanate abolished — Atatürk founds Turkish Republic",wiki:"Abolition_of_the_Ottoman_caliphate" },
+  ]
+};

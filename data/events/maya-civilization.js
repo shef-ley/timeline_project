@@ -1,0 +1,41 @@
+// Maya civilization — key events for drill-down timeline
+// Span: ~2000 BCE – 1697 CE (early villages → fall of last independent city)
+
+window.EVENTS = {
+  name: "Maya civilization",
+  color: "#40c888",
+  wiki: "Maya_civilization",
+  events: [
+    { year:-2000, title:"Early Maya villages in Guatemala highlands",          wiki:"Preclassic_Maya" },
+    { year:-1000, title:"Nakbe founded — first large Maya city",               wiki:"Nakbe" },
+    { year:-400,  title:"El Mirador at peak — largest city in Mesoamerica",    wiki:"El_Mirador" },
+    { year:-100,  title:"Late Preclassic collapse — El Mirador abandoned",     wiki:"Preclassic_Maya" },
+    { year:250,   title:"Classic period begins — cities, writing, calendars",  wiki:"Classic_Maya_collapse" },
+    { year:292,   title:"Tikal Stela 29 — earliest Long Count date recorded",  wiki:"Tikal" },
+    { year:378,   title:"Teotihuacan conquers Tikal ('Fire is Born' arrives)",  wiki:"Siyaj_K%27ak%27" },
+    { year:431,   title:"Copán dynasty founded (K'inich Yax K'uk' Mo')",        wiki:"Copán" },
+    { year:562,   title:"Caracol defeats Tikal in 'Star War'",                 wiki:"Caracol" },
+    { year:615,   title:"Pakal the Great begins 68-year reign at Palenque",    wiki:"Pakal_the_Great" },
+    { year:650,   title:"Maya population peaks (~2 million people)",           wiki:"Maya_civilization" },
+    { year:682,   title:"Tikal's golden age — Jasaw Chan K'awiil I",          wiki:"Jasaw_Chan_K%27awiil_I" },
+    { year:695,   title:"Tikal defeats Calakmul — Tikal supremacy restored",   wiki:"Calakmul" },
+    { year:738,   title:"Quirigua beheads Copán's king — power shift",         wiki:"Quirigua" },
+    { year:800,   title:"Classic Maya collapse begins — southern cities fall", wiki:"Classic_Maya_collapse" },
+    { year:830,   title:"Chichen Itza rises as dominant northern city",        wiki:"Chichen_Itza" },
+    { year:900,   title:"Collapse complete — rainforest reclaims southern cities",wiki:"Classic_Maya_collapse" },
+    { year:987,   title:"Kukulkan/Quetzalcoatl arrives — Toltec-Maya culture", wiki:"Kukulkan" },
+    { year:1000,  title:"Chichen Itza at its height — El Castillo pyramid",    wiki:"El_Castillo,_Chichen_Itza" },
+    { year:1050,  title:"Chichen Itza declines; Mayapan rises",                wiki:"Mayapan" },
+    { year:1200,  title:"Mayapan Confederacy controls Yucatan",                wiki:"Mayapan" },
+    { year:1441,  title:"Internal revolt — Mayapan destroyed, city-states form",wiki:"Mayapan" },
+    { year:1502,  title:"Columbus encounters Maya traders in Gulf of Honduras", wiki:"Christopher_Columbus" },
+    { year:1511,  title:"Spanish shipwrecked survivors live among Maya",        wiki:"Gerónimo_de_Aguilar" },
+    { year:1517,  title:"Hernández de Córdoba's expedition — first Spanish battle",wiki:"Francisco_Hernández_de_Córdoba_(conquistador)" },
+    { year:1519,  title:"Cortés receives Malinche from Maya lords",            wiki:"La_Malinche" },
+    { year:1527,  title:"Spanish conquest of Yucatan begins (Montejo)",        wiki:"Conquest_of_Yucatán" },
+    { year:1541,  title:"Mérida founded on ruins of Maya city T'ho",          wiki:"Mérida,_Yucatán" },
+    { year:1546,  title:"Great Maya revolt against Spanish colonizers",         wiki:"Conquest_of_Yucatán" },
+    { year:1562,  title:"Bishop Landa burns Maya codices (only 4 survive)",    wiki:"Diego_de_Landa" },
+    { year:1697,  title:"Nojpeten (Tayasal) falls — last independent Maya city",wiki:"Nojpeten" },
+  ]
+};
